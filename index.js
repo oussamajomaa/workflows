@@ -11,3 +11,5 @@ app.get('/user', (req,res)=> {
 })
 
 app.listen('3001', ()=> console.log('Server is running on 3001'))
+
+module.exports = app
