@@ -1,31 +1,59 @@
+# Nom du workflow CI/CD
 name: CI/CD
 
+# Déclencheurs du workflow :
+# - Se déclenche à chaque push sur les branches 'master' ou 'main'
 on: 
   push:
-    branches: [master, main] # Déclenche le déploiement à chaque push sur la branche main ou master
+    branches: [master, main]
 
+# Définition des jobs (tâches) à exécuter
 jobs:
+  # Nom du job (construction et déploiement)
   build-and-deploy:
+    # Exécution sur une machine virtuelle Ubuntu
     runs-on: ubuntu-latest
 
+    # Étapes séquentielles du job
     steps:
+      # Étape 1 : Clone du dépôt Git
       - name: cloner le code
+        # Utilise l'action officielle pour cloner le dépôt
         uses: actions/checkout@v3
 
+      # Étape 2 : Installation de Node.js
       - name: installer node js
+        # Utilise l'action officielle pour installer Node
         uses: actions/setup-node@v3
         with: 
+            # Version spécifique de Node.js (v22 ici)
             node-version: "22"
         
-      - name: Installer les dépandances
+      # Étape 3 : Installation des dépendances avec npm
+      - name: Installer les dépendances
+        # Exécute la commande npm install
         run: npm install
 
+      # Étape 4 : Exécution des tests
       - name: Lancer les tests
+        # Exécute la commande npm test
         run: npm test
+
+      # Étape 5 : Déclenchement du déploiement sur Render
       - name: Trigger Render Deploy Hook
+        # Envoie une requête POST au webhook de Render
+        # L'URL est stockée dans les secrets GitHub (sécurité)
         run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
 
       
+
+
+
+
+
+
+
+
     #   - name: Déploiement sur un vps avec ssh
     #     uses: appleboy/ssh-action@master
     #     with:
