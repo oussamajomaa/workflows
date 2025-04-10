@@ -10,6 +10,12 @@ app.get('/user', (req,res)=> {
     res.json('Voici une liste des utilisateurs')
 })
 
-app.listen('3001', ()=> console.log('Server is running on 3001'))
+const PORT = process.env.PORT || 3001
+// Tester si ton fichier est exécuté directement, ou s’il est importé dans un autre fichier
+if (require.main === module) {    
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
 
 module.exports = app
